@@ -1,0 +1,28 @@
+shared-memory-dict 0.7.2 
+
+PI_Camera
+-server
+--receives requests
+--responds with picture
+
+NAS
+-Client
+--requests a picture be taken
+--writes data to file
+--returns file name
+
+-Boss
+--Every 60s take a pic via client
+--every 70s take a pic via client
+--If request from php program, take a pic on demand
+
+if t=60:
+	take pic
+	t=0
+elif (shared mem check)
+	take pic
+	write file location to pic label
+	take pic
+else
+	sleep 1
+	t=t+1
