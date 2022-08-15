@@ -9,7 +9,8 @@ This prgram:
 '''
 
 from shared_memory_dict import SharedMemoryDict
-import time
+from time import sleep
+import sys
 
 #This value will be provided by the calling php function, it will be the IP address
 who=str(sys.argv[1])
@@ -19,9 +20,9 @@ exist_smd=SharedMemoryDict(name='queue', size=1024)
 exist_smd[who]=1
 
 #well our request has not been filled, wait
-while smd[who]==1:
+while exist_smd[who]==1:
 	sleep(1)
 	
 #onece our request is filled, return the value (shoudl be file name)
-print (smd[who])
-	
+print (exist_smd[who])
+exist_smd.shm.close()

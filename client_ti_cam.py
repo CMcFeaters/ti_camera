@@ -1,4 +1,4 @@
-#1/home/i/env/bin/python3
+#1/home/pi/ti_env/bin/python
 
 '''
 This program is the client runs on the NAS.  It activates on its own every 60 and 70s or when requested to via the php program.
@@ -61,7 +61,7 @@ def main_loop():
 			request_pic()
 			t+=PIC_TIME
 		else:
-			time.sleep(1)	#sleep for roughly a second, increment and go
+			sleep(1)	#sleep for roughly a second, increment and go
 			t+=1
 		
 		#see if we have any requests, if we do assume it took 3s to fullfill
@@ -81,6 +81,7 @@ def scan_smd():
 	keylist=[]
 	#search to see if we have any requests
 	for key in smd.keys():
+		print("%s - %s"%(key,smd[key]))
 		if smd[key]==1:
 			keylist.append(key)
 	

@@ -26,3 +26,5 @@ elif (shared mem check)
 else
 	sleep 1
 	t=t+1
+
+need to create a new venv on NAS to run this program, had to install python 3.8, which is what supports shared-memory-dict
