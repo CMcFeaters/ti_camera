@@ -1,3 +1,8 @@
+"""
+builds the shared mem, run this before mp1, keep it alive till mp2 finishes
+when killing it use ctrl+c and it will spit out the list
+"""
+
 from multiprocessing import shared_memory
 from time import sleep
 shm_a = shared_memory.SharedMemory(create=True, size=10, name="test")
