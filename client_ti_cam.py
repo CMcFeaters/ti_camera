@@ -16,23 +16,23 @@ Client: PiNAS 192.168.1.9
 
 '''
 
+import redis
 from time import sleep
 from datetime import datetime as dt
 import cv2
 import socket
 import numpy as np
 import os
-from shared_memory_dict import SharedMemoryDict
 
 #ip info
-HOST = "192.168.1.227"	#basic loopback for local host
+r = redis.Redis(host='localhost', port=6379, db=0)
+HOST = "192.168.1.227"	#camera host
 PORT=65432	#non-privileged port
 PIC_TIME=3	#we are saying 3s for a picture to be taken
 LOW_TIME=55	#time for our first pic
 HIGH_TIME=66 #time for our second pic
 
-#the shared memory dict we will use for instant requests
-smd=SharedMemoryDict(name='queue', size=1024)
+
 
 
 def main_loop():
@@ -65,31 +65,31 @@ def main_loop():
 			t+=1
 		
 		#see if we have any requests, if we do assume it took 3s to fullfill
-		if scan_smd()>0:
+		if scan_redis()>0:
 			t+=PIC_TIME
 			
 		
 		
-def scan_smd():
+def scan_redis():
 	"""
-	scan_smd(): this fucntion is responsible for scanning the SMD and taking pics as requested by:
-	1) scan each key in SMD and determine if any values are 1s
-	2) if any values are 1s take and store the picture
-	3) for each value that was a 1, write the filename
+	scan_redis(): this fucntion is responsible for scanning the redis db and taking pics as requested by:
+	1) scan each key in redis db and determine if any values are "open"
+	2) if any values are "open" take and store the picture
+	3) for each value that was a "open", write the filename to that key
 	returns: (int) number of requests fullfilled
 	"""
 	keylist=[]
 	#search to see if we have any requests
-	for key in smd.keys():
-		print("%s - %s"%(key,smd[key]))
-		if smd[key]==1:
+	for key in r.scan_iter("IP:*"):
+		print("%s - %s"%(key,r.get(key)))
+		if r.get(key)==b"open":
 			keylist.append(key)
 	
 	if len(keylist)>0:	#we have some requests
 		fname=request_pic()	#take the pic and save the fname
 		#for each requestor, update the smd dict with the filename
 		for thing in keylist:
-			smd[thing]=fname
+			r.set(thing,fname)
 		
 		return len(keylist)#return howmany we did
 	else:	#we have no requests
