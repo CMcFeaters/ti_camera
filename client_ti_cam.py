@@ -16,7 +16,9 @@ Client: PiNAS 192.168.1.9
 
 '''
 
+#import daemon	#requires python-daemon to run this in the background when called
 import redis
+import os
 from time import sleep
 from datetime import datetime as dt
 import cv2
@@ -143,4 +145,6 @@ def request_pic():
 
 #if i'm the main dog, run this
 if __name__=="__main__":
+	pid=os.getpid()
+	r.set("client_cam")=pid	#set the process ID so it can be found by the mgr
 	main_loop()
