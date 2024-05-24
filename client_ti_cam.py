@@ -134,7 +134,7 @@ def request_pic():
 		encoded_array=np.fromstring(data,np.uint8)	#convert from string to array
 		decoded_image=cv2.imdecode(encoded_array,cv2.IMREAD_COLOR)	#decode arryay to image
 		fname='TI_%s.jpg'%dt.now().strftime("%Y%m%d_%H%M%S")
-		st1=('/mnt/raid1/shared/TI_20220812/%s'%fname)	#file location
+		st1=('/mnt/raid1/shared/TI_20221202/%s'%fname)	#file location
 		cv2.imwrite(st1,decoded_image)	#write teh file
 		print("File %s written"%st1)
 		

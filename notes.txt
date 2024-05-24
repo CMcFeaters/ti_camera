@@ -10,21 +10,36 @@ NAS
 --requests a picture be taken
 --writes data to file
 --returns file name
+-Runs out of /tienv/
+-Apache Server
 
--Boss
---Every 60s take a pic via client
---every 70s take a pic via client
---If request from php program, take a pic on demand
 
-if t=60:
-	take pic
-	t=0
-elif (shared mem check)
-	take pic
-	write file location to pic label
-	take pic
-else
-	sleep 1
-	t=t+1
+Open Connectin to PI_Camera at 192.168.1.227
+chuck5621
+temp279word
+start a new screen
+>screen bash
+run server server_doodle_cam_on_demand.py
+>python server_doodle_cam_on_demand.py
+ctrl+a D
 
-need to create a new venv on NAS to run this program, had to install python 3.8, which is what supports shared-memory-dict
+Open Connection to NAS at 192.168.1.8
+pi
+ilmpwmc7infact
+add the new folder for the pictures
+>sudo nano client_ti_cam.py
+edit line with "st1=" for new file location
+update permissions
+>mkdir "new folder"
+>CHMOD 777 "new folder"
+>CHOWN pi:pi "new folder"
+change the php location
+>sudo nano /var/www/html/ti.php
+change file location to "new folder"
+
+start screen
+>screen bash
+start the venv
+>source ./env/bin/activate
+run client_ti_cam
+>python ./client_ti_cam.py
