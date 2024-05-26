@@ -16,9 +16,7 @@ Client: PiNAS 192.168.1.9
 
 '''
 
-#import daemon	#requires python-daemon to run this in the background when called
 import redis
-import os
 from time import sleep
 from datetime import datetime as dt
 import cv2
@@ -31,8 +29,8 @@ r = redis.Redis(host='localhost', port=6379, db=0)
 HOST = "192.168.1.227"	#camera host
 PORT=65432	#non-privileged port
 PIC_TIME=3	#we are saying 3s for a picture to be taken
-LOW_TIME=55	#time for our first pic
-HIGH_TIME=66 #time for our second pic
+LOW_TIME=15	#time for our first pic
+HIGH_TIME=30 #time for our second pic
 
 
 
@@ -134,7 +132,7 @@ def request_pic():
 		encoded_array=np.fromstring(data,np.uint8)	#convert from string to array
 		decoded_image=cv2.imdecode(encoded_array,cv2.IMREAD_COLOR)	#decode arryay to image
 		fname='TI_%s.jpg'%dt.now().strftime("%Y%m%d_%H%M%S")
-		st1=('/mnt/raid1/shared/TI_20221202/%s'%fname)	#file location
+		st1=('/mnt/raid1/shared/TI_20240517/%s'%fname)	#file location
 		cv2.imwrite(st1,decoded_image)	#write teh file
 		print("File %s written"%st1)
 		
@@ -145,6 +143,4 @@ def request_pic():
 
 #if i'm the main dog, run this
 if __name__=="__main__":
-	pid=os.getpid()
-	r.set("client_cam")=pid	#set the process ID so it can be found by the mgr
 	main_loop()

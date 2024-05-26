@@ -5,7 +5,7 @@ This program:
 -When a request is received the program takes a picture and converts to an RGB stream
 -Sends back to the client.
 
-Server: PiCamera 192.168.1.227
+Server: PiCamera 192.168.1.247
 Client: PiNAS 192.168.1.9
 
 '''
