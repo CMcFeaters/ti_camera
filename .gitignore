@@ -21,6 +21,7 @@ sdist/
 var/
 wheels/
 Scripts/
+Notes/
 
 pip-wheel-metadata/
 share/python-wheels/
