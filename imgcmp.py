@@ -66,7 +66,7 @@ def main():
 if __name__=="__main__":
 	if sys.argv[1]=="b":
 		g_date="20240531_B"
-	else:
+	else if sys.argv[1]=="p":
 		g_date="20240531_P"
 		
 	main()

@@ -12,6 +12,7 @@ This program:
 -writes '' to SDM 'request'
 
 Server: PiCamera 192.168.1.227
+Server2: PiZero: 192.168.1.247
 Client: PiNAS 192.168.1.9
 
 '''
