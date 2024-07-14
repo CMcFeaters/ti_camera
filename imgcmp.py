@@ -25,7 +25,7 @@ import bisect
 import moviepy.editor as mp
 from datetime import datetime as dt
 
-game_date="20240531" #date you played the game/root of your P/B files
+game_date="20240712" #date you played the game/root of your P/B files
 
 def get_time(file_name):
 	'''
@@ -162,7 +162,7 @@ def main(g_files):
 	
 if __name__=="__main__":
 	
-	if len(sys.argv)>0:
+	if len(sys.argv)>1:
 		#do board
 		if sys.argv[1]=="b":
 			g_files=["%s_B"%game_date]
