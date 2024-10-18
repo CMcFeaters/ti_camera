@@ -101,7 +101,7 @@ def scan_redis():
 
 def take_pic(host,port,file)
 	'''
-		initiates the socket given the varios inputs
+		initiates the socket given the various inputs
 	'''
 	
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
