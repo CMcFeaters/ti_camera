@@ -108,8 +108,21 @@ def take_pic(host,port,file)
 	
 		#ask for a picture from the server
 		print("Initiating connection")
-		s.connect((host,port))
-		s.sendall(b'TI Pic please')
+		'''
+		try and connect, if the process fails, exit and keep the program
+		running.  this iwll allow for the client to be running while we wait for
+		a camera to be connected 
+		This will not handle a camera being disconnected during a connection.
+		if we want that, have try include all of the "s" actions
+		'''
+		try:
+			s.connect((host,port))
+		except:
+			print("connection error (%s,%s)"%(host,port))
+			s.close()
+			return("error")
+			
+		s.sendall(b'TI Pic please')	#ask for the data
 		
 		#once we connect, recieve the response until connection is closed
 		data=0
