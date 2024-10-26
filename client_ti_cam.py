@@ -20,24 +20,41 @@ Client: PiNAS 192.168.1.9
 import redis
 from time import sleep
 from datetime import datetime as dt
+from dotenv import dotenv_values
 import cv2
 import socket
 import numpy as np
 import os
 
 #ip info
+config=dotenv_values(".env_client")
 r = redis.Redis(host='localhost', port=6379, db=0)
-HOST = "192.168.1.227"	#pi camera host
-Z_HOST = "192.168.1.247" #pi zero camera host
-b_file= "TI_20240531_B"
-p_file= "TI_20240531_P"
+HOST = config['pi3_host']	#pi camera host
+Z_HOST = config['pi0_host'] #pi zero camera host
+b_file= "TI_%s_B"%config['gamedate']
+p_file= "TI_%s_P"%config['gamedate']
+f_dir=config['f_dir']
 PORT=65432	#non-privileged port
 PIC_TIME=3	#we are saying 3s for a picture to be taken
 LOW_TIME=15	#time for our first pic
 HIGH_TIME=30 #time for our second pic
 
 
-
+def directory_check():
+	'''
+	checks to verify the directories exist.  if they do not, creates them
+	'''
+	paths=[os.path.join(f_dir,p_file),os.path.join(f_dir,b_file)]
+	for path in paths:
+		try: 
+			os.mkdir(path)
+			print(f"Directory Created '{path}'")
+		except FileExistsError:
+			print(f"Directory '{path}' already exists.")
+		except PermissionError:
+			print(f"Permission denied: Unable to create '{path}'.")
+		except Exception as e:
+			print(f"An error occurred: {e}")
 
 def main_loop():
 	"""
@@ -99,7 +116,7 @@ def scan_redis():
 	else:	#we have no requests
 		return 0
 
-def take_pic(host,port,file)
+def take_pic(host,port,file):
 	'''
 		initiates the socket given the various inputs
 	'''
@@ -142,7 +159,7 @@ def take_pic(host,port,file)
 		encoded_array=np.fromstring(data,np.uint8)	#convert from string to array
 		decoded_image=cv2.imdecode(encoded_array,cv2.IMREAD_COLOR)	#decode arryay to image
 		fname='TI_%s.jpg'%dt.now().strftime("%Y%m%d_%H%M%S")
-		st1=('/mnt/raid1/shared/%s/%s'%(file,fname))	#file location
+		st1=('%s/%s/%s'%(f_dir,file,fname))	#file location
 		cv2.imwrite(st1,decoded_image)	#write teh file
 		print("File %s written"%st1)
 		
@@ -174,4 +191,5 @@ def request_pic():
 
 #if i'm the main dog, run this
 if __name__=="__main__":
+	directory_check()
 	main_loop()
